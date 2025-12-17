@@ -14,4 +14,4 @@ BAB V Penutup")
 
 st.write("Data diambil dari https://idx.co.id/id/data-pasar/laporan-statistik/digital-statistic/monthly/stock-price-index/daily-idx-indices?filter=eyJ5ZWFyIjoiMjAyNCIsIm1vbnRoIjoiMSIsInF1YXJ0ZXIiOjAsInR5cGUiOiJtb250aGx5In0%3D")
 
-st.write("alat yang digunakan excel, github, stream
+st.write("alat yang digunakan excel, github, git bash, streamlit, dan anaconda promt")
