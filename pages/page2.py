@@ -5,18 +5,20 @@ import pandas as pd
 st.title("📈 Analisis Data Saham")
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(data_saham_baru))
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+# Path file Excel
 FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru")
 
-
+# Cek apakah file ada
 if not os.path.exists(FILE_PATH):
-    st.error("File data_saham.xlsx tidak ditemukan di folder data")
+    st.error("❌ File data_saham.xlsx tidak ditemukan di folder data")
     st.stop()
 
+# Baca data
+df = pd.read_excel(FILE_PATH)
 
-df = pd.read_excel(data_saham_baru)
-
-
+# Rapikan nama kolom
 df.columns = df.columns.str.strip()
 
 st.subheader("📋 Preview Data")
@@ -25,7 +27,7 @@ st.dataframe(df)
 st.subheader("🔍 Daftar Kolom")
 st.write(df.columns.tolist())
 
-
+# Pilih kolom perusahaan
 kolom_perusahaan = st.selectbox(
     "Pilih kolom nama perusahaan:",
     df.columns
