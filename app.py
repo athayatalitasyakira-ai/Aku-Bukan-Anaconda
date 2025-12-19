@@ -30,7 +30,3 @@ Selamat datang di aplikasi analisis saham.
 Gunakan menu **sidebar** untuk memilih halaman
 dan melihat grafik serta analisis data saham.
 """)
-<<<<<<< HEAD
- 
-=======
->>>>>>> 2477f8ea5f7f172d4eefd67afc86ec8749726187
