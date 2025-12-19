@@ -5,10 +5,10 @@ import os
 st.title("📊 Data Saham")
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname('Data Saham Prakbigdata.csv BARU'))
 
 
-FILE_PATH = os.path.join(BASE_DIR, "Data_Saham_Prakbigdata.csv_BARU")
+FILE_PATH = os.path.join(BASE_DIR, 'Data_Saham_Prakbigdata.csv_BARU')
 
 
 if not os.path.exists(FILE_PATH):
