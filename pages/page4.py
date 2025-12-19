@@ -1,9 +1,4 @@
 import pandas as pd
-df = pd.read_csv('data/datahargasahamcopy.csv')
-st.write(df.tail())
-
-st.write("simulasi error")
-
 import matplotlib.pyplot as plt
 from ipywidgets import interact, Dropdown
 from datetime import datetime, timedelta
@@ -18,7 +13,6 @@ def excel_serial_to_date(serial):
             return pd.to_datetime(serial, format='%m/%d/%Y')
         except:
             return pd.NaT  # Jika gagal, return NaT
-
 # Baca file Excel (asumsikan file ada di direktori yang sama atau sesuaikan path)
 file_path = 'Data Harga Saham Prakbigdata.xlsx'
 df = pd.read_excel(file_path, sheet_name='Sheet1')
@@ -46,8 +40,7 @@ def plot_saham(saham):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-    
-    # Penjelasan di bawah grafik
+# Penjelasan di bawah grafik
     print(f"\nPenjelasan Grafik untuk {saham}:")
     print("Grafik ini menampilkan data historis harga saham dari tanggal terendah hingga tertinggi.")
     print(f"Data dimulai dari {df['Tanggal'].min().strftime('%Y-%m-%d')} hingga {df['Tanggal'].max().strftime('%Y-%m-%d')}.")
