@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from pathlib import Path
 
 st.title("📊 Nilai Saham Perusahaan LQ45")
 
@@ -12,25 +13,22 @@ lq45 = [
     "MYOR","PGEO","PTBA","SMGR","SRTG","TBIG","TLKM","TOWR","TPIA","UNTR"
 ]
 
-# =========================
-# Dropdown pilihan perusahaan
-# =========================
 perusahaan = st.selectbox("Pilih Perusahaan", lq45)
 
 # =========================
-# Load Excel
+# Load Excel (AMAN)
 # =========================
-df = pd.read_excel("Data Saham Prakbigdata (1).xlsx")
+BASE_DIR = Path(__file__).resolve().parent.parent
+file_path = BASE_DIR / "data" / "Data_Saham_Prakbigdata.xlsx"
+
+df = pd.read_excel(file_path)
 df.columns = df.columns.str.strip()
 
 # =========================
-# Filter data sesuai pilihan
+# Filter data
 # =========================
 data_perusahaan = df[df["Perusahaan"] == perusahaan]
 
-# =========================
-# Tampilkan Nilai
-# =========================
 st.subheader("📈 Data Nilai")
 
 if not data_perusahaan.empty:
