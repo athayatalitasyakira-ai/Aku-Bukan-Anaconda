@@ -33,7 +33,7 @@ except Exception as e:
     st.code(str(e))
 
 
-data = pd.read_excel("Data Harga Saham Prakbigdata.xlsx")
+
 
 st.title("Analisis Data Harga Saham")
 st.write("Data ini berisi pergerakan indeks saham di Indonesia.")
