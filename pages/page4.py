@@ -1,7 +1,10 @@
+ HEAD
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from ipywidgets import interact, Dropdown
 from datetime import datetime, timedelta
+<<<<<<< HEAD
 
 def excel_serial_to_date(serial):
     if isinstance(serial, (int, float)):
@@ -51,3 +54,6 @@ def plot_saham(saham):
 
 # Buat dropdown interaktif
 interact(plot_saham, saham=Dropdown(options=saham_options, description='Pilih Saham:'));
+=======
+ 69436736987791aa93a728a773631f3e54fbd1f0
+>>>>>>> debd6586cc6867eb143bc7352253bfcdc49bcfed
