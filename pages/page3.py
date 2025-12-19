@@ -47,46 +47,43 @@ yang terdiri dari:
 - **LQ45** yang mewakili saham paling likuid
 - **IDX30** yang mewakili saham berkapitalisasi besar
 
-Jumlah data yang digunakan sebanyak **{} observasi**.
-""".format(len(data)))
 
-# ANALISIS STATISTIK
 st.subheader("2. Statistik Deskriptif")
 st.write("""
 Berdasarkan statistik deskriptif, dapat disimpulkan bahwa:
-- IHSG memiliki nilai rata-rata paling tinggi karena mencerminkan agregasi seluruh saham.
-- LQ45 menunjukkan fluktuasi yang lebih besar dibanding IDX30.
-- IDX30 relatif lebih stabil karena berisi saham-saham unggulan (blue chip).
-""")
+IHSG memiliki nilai rata-rata paling tinggi karena mencerminkan agregasi seluruh saham.
+LQ45 menunjukkan fluktuasi yang lebih besar dibanding IDX30.
+IDX30 relatif lebih stabil karena berisi saham-saham unggulan (blue chip).
+    """)
 st.write(data.describe())
 
-# ANALISIS PERGERAKAN INDEKS
+
 st.subheader("3. Analisis Pergerakan Indeks")
 st.write("""
 Pergerakan ketiga indeks menunjukkan **pola yang cenderung searah**.
 Hal ini menandakan adanya korelasi positif antar indeks saham.
 
-- Saat IHSG mengalami penurunan, LQ45 biasanya turun lebih tajam.
-- IDX30 cenderung mengalami perubahan yang lebih kecil,
+Saat IHSG mengalami penurunan, LQ45 biasanya turun lebih tajam.
+IDX30 cenderung mengalami perubahan yang lebih kecil,
   menunjukkan tingkat risiko yang lebih rendah.
 """)
 
-# ANALISIS RISIKO
+
 st.subheader("4. Analisis Risiko dan Volatilitas")
 st.write("""
 Dari pola pergerakan data:
-- **LQ45** memiliki volatilitas paling tinggi sehingga cocok bagi investor agresif.
-- **IHSG** mencerminkan kondisi pasar secara umum.
-- **IDX30** lebih stabil dan cocok untuk investasi jangka menengah hingga panjang.
+LQ45  memiliki volatilitas paling tinggi sehingga cocok bagi investor agresif.
+IHSG mencerminkan kondisi pasar secara umum.
+IDX30 lebih stabil dan cocok untuk investasi jangka menengah hingga panjang.
 """)
 
-# KESIMPULAN
+
 st.subheader("5. Kesimpulan")
 st.write("""
 Berdasarkan hasil analisis data Excel:
-1. Ketiga indeks saham bergerak searah dan saling memengaruhi.
-2. LQ45 paling sensitif terhadap perubahan kondisi pasar.
-3. IDX30 menunjukkan stabilitas tertinggi.
-4. Data ini dapat digunakan sebagai dasar pengambilan keputusan investasi
+Ketiga indeks saham bergerak searah dan saling memengaruhi.
+LQ45 paling sensitif terhadap perubahan kondisi pasar.
+IDX30 menunjukkan stabilitas tertinggi.
+Data ini dapat digunakan sebagai dasar pengambilan keputusan investasi
    maupun analisis kondisi pasar modal Indonesia.
 """)
