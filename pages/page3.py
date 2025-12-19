@@ -1,41 +1,65 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(page_title="Data Saham", layout="wide")
-st.title("📈 Visualisasi Data Saham")
+# ======================
+# Judul Aplikasi
+# ======================
+st.set_page_config(page_title="Data Perusahaan", layout="wide")
+st.title("📊 Data Perusahaan")
 
-FILE_PATH = "Data Saham Prakbigdata.csv  BARU.xlsx"
-
+# ======================
+# Load Data (AMAN)
+# ======================
 @st.cache_data
 def load_data():
-    return pd.read_excel("Data Saham Prakbigdata.csv BARU.xlsx" , header=None)
+    df = pd.read_excel(
+        "Data Saham Prakbigdata.csv  BARU.xlsx",
+        header=None
+    )
 
-df = load_data()
+    # Rename kolom agar tidak KeyError
+    df.columns = [
+        "Tanggal", "Kode", "Open", "High", "Low",
+        "Close", "Volume", "Adj Close",
+        "Kolom8", "Kolom9", "Kolom10", "Kolom11"
+    ]
 
-# rename kolom langsung (ANTI KEYERROR)
-df.columns = [
-    "Tanggal", "Kode", "Open", "High", "Low",
-    "Close", "Volume", "Adj Close",
-    "C8", "C9", "C10", "C11"
-]
+    # Ubah kolom tanggal
+    df["Tanggal"] = pd.to_datetime(df["Tanggal"], errors="coerce")
+    df = df.dropna(subset=["Tanggal"])
 
-# parsing tanggal aman
-df["Tanggal"] = pd.to_datetime(df["Tanggal"], errors="coerce")
-df = df.dropna(subset=["Tanggal"])
+    return df
 
-st.sidebar.header("Filter Saham")
+df = "Data_saham_Prakbogdata_BARU.xlsx'
 
-saham_list = sorted(df["Kode"].dropna().unique())
+# ======================
+# Pilih Perusahaan
+# ======================
+st.sidebar.header("Pilih Perusahaan")
 
-selected = st.sidebar.selectbox(
-    "Pilih Kode Saham",
-    saham_list
+perusahaan = sorted(df["Kode"].dropna().unique())
+
+kode = st.sidebar.selectbox(
+    "Kode Perusahaan",
+    perusahaan
 )
 
-df_saham = df[df["Kode"] == selected]
+# ======================
+# Filter Data
+# ======================
+df_perusahaan = df[df["Kode"] == kode]
 
-st.dataframe(df_saham, use_container_width=True)
+# ======================
+# Tampilkan Data
+# ======================
+st.subheader(f"📋 Data Perusahaan: {kode}")
+st.dataframe(df_perusahaan, use_container_width=True)
+
+# ======================
+# Grafik Harga
+# ======================
+st.subheader("📈 Grafik Harga Penutupan")
 
 st.line_chart(
-    df_saham.set_index("Tanggal")["Close"]
+    df_perusahaan.set_index("Tanggal")["Close"]
 )

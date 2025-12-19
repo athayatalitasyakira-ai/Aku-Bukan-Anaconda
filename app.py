@@ -1,5 +1,4 @@
 import streamlit as st
-import pandas as pd
 
 pages = [
     st.Page(page="pages/page1.py", title="Home", icon="🐊"),
@@ -17,6 +16,8 @@ pg = st.navigation(
 pg.run()
 
 
+<<<<<<< HEAD
+=======
 st.set_page_config(
     page_title="Analisis Saham",
     layout="wide"
@@ -30,3 +31,4 @@ Selamat datang di aplikasi analisis saham.
 Gunakan menu **sidebar** untuk memilih halaman
 dan melihat grafik serta analisis data saham.
 """)
+>>>>>>> 514a169b227ae3e0e302536207a4df97479a746a
