@@ -9,7 +9,7 @@ uploaded_file = st.file_uploader(
 )
 
 if uploaded_file is not None:
-    df = pd.read_excel(uploaded_file)
+    df = pd.read_excel(data_saham_baru)
 
     df.columns = df.columns.str.strip()
 
