@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
-from docx import Document
 
-st.title("📊 Informasi Perusahaan LQ45")
+st.title("📊 Nilai Saham Perusahaan LQ45")
 
 # =========================
 # List Perusahaan LQ45
@@ -14,43 +13,27 @@ lq45 = [
 ]
 
 # =========================
-# Pilih Perusahaan
+# Dropdown pilihan perusahaan
 # =========================
 perusahaan = st.selectbox("Pilih Perusahaan", lq45)
 
 # =========================
 # Load Excel
 # =========================
-df = pd.read_excel("Data Saham Prakbigdata.xlsx")
+df = pd.read_excel("Data Saham Prakbigdata (1).xlsx")
 df.columns = df.columns.str.strip()
 
 # =========================
-# Load Word
-# =========================
-doc = Document("INFORMASI.docx")
-
-info_text = ""
-for para in doc.paragraphs:
-    if para.text.startswith(perusahaan):
-        info_text = para.text
-        break
-
-# =========================
-# Tampilkan Informasi Perusahaan
-# =========================
-st.subheader("📄 Informasi Perusahaan")
-if info_text:
-    st.write(info_text)
-else:
-    st.warning("Informasi perusahaan tidak ditemukan di file Word")
-
-# =========================
-# Filter Data Excel
+# Filter data sesuai pilihan
 # =========================
 data_perusahaan = df[df["Perusahaan"] == perusahaan]
 
-st.subheader("📈 Data Perusahaan")
+# =========================
+# Tampilkan Nilai
+# =========================
+st.subheader("📈 Data Nilai")
+
 if not data_perusahaan.empty:
-    st.dataframe(data_perusahaan)
+    st.dataframe(data_perusahaan[["Tanggal", "Nilai"]])
 else:
     st.warning("Data perusahaan tidak ditemukan di Excel")
