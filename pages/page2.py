@@ -1,41 +1,24 @@
-import os
 import streamlit as st
 import pandas as pd
 
-st.title("📈 Analisis Data Saham")
+st.title("📊 Data Saham (Tanpa File)")
 
+df = pd.DataFrame({
+    "Perusahaan": ["BBCA", "BBRI", "TLKM", "BMRI"],
+    "Harga": [9800, 5200, 4100, 6100],
+    "Volume": [120000, 150000, 100000, 130000]
+})
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+st.success("✅ Data berhasil dimuat")
 
-
-FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru")
-
-
-
-# Baca data
-df = pd.read_excel("data_saham_baru")
-
-# Rapikan nama kolom
-df.columns = df.columns.str.strip()
-
-st.subheader("📋 Preview Data")
-st.dataframe(df)
-
-st.subheader("🔍 Daftar Kolom")
-st.write(df.columns.tolist())
-
-# Pilih kolom perusahaan
-kolom_perusahaan = st.selectbox(
-    "Pilih kolom nama perusahaan:",
-    df.columns
-)
-
+# Pilih perusahaan
 perusahaan = st.selectbox(
-    "Pilih perusahaan:",
-    df[kolom_perusahaan].dropna().unique()
+    "Pilih Perusahaan",
+    df["Perusahaan"].unique()
 )
 
-data_perusahaan = df[df[kolom_perusahaan] == perusahaan]
+# Filter data
+data_perusahaan = df[df["Perusahaan"] == perusahaan]
 
-st.subheader(f"📌 Data untuk {perusahaan}")
+st.subheader("📈 Detail Saham")
 st.dataframe(data_perusahaan)
