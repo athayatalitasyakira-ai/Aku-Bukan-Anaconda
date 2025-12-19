@@ -2,81 +2,55 @@ import streamlit as st
 import pandas as pd
 from docx import Document
 
-# ===============================
-# FUNGSI BACA DATA WORD
-# ===============================
-def load_word_info(file_path):
-    doc = Document(file_path)
-    data = {}
+st.title("📊 Informasi Perusahaan LQ45")
 
-    for para in doc.paragraphs:
-        text = para.text.strip()
-        if "(" in text and ":" in text:
-            kode = text.split("(")[0].strip("- ").strip()
-            deskripsi = text.split("):")[-1].strip()
-            data[kode] = deskripsi
+# =========================
+# List Perusahaan LQ45
+# =========================
+lq45 = [
+    "AADI","ADRO","AMRT","ANTM","ARTO","ASII","BBCA","BBNI","BBRI","BMRI",
+    "BRPT","BUKA","CPIN","GOTO","INCO","INDF","INTP","KLBF","MDKA","MEDC",
+    "MYOR","PGEO","PTBA","SMGR","SRTG","TBIG","TLKM","TOWR","TPIA","UNTR"
+]
 
-    return data
+# =========================
+# Pilih Perusahaan
+# =========================
+perusahaan = st.selectbox("Pilih Perusahaan", lq45)
 
-# ===============================
-# LOAD DATA
-# ===============================
-word_info = load_word_info("INFORMASI.docx")
-excel_data = pd.read_excel("Data Saham Prakbigdata.csv  BARU.xlsx")
+# =========================
+# Load Excel
+# =========================
+df = pd.read_excel("Data Saham Prakbigdata.xlsx")
+df.columns = df.columns.str.strip()
 
-# Pastikan kolom kode saham ada
-excel_data["Kode Saham"] = excel_data["Kode Saham"].str.upper()
+# =========================
+# Load Word
+# =========================
+doc = Document("INFORMASI.docx")
 
-# ===============================
-# SETUP PAGE
-# ===============================
-st.set_page_config(
-    page_title="Informasi Saham Indonesia",
-    layout="wide"
-)
+info_text = ""
+for para in doc.paragraphs:
+    if para.text.startswith(perusahaan):
+        info_text = para.text
+        break
 
-st.title("📊 Informasi Saham Indonesia")
-st.caption("Pilih saham untuk melihat informasi perusahaan & data saham")
+# =========================
+# Tampilkan Informasi Perusahaan
+# =========================
+st.subheader("📄 Informasi Perusahaan")
+if info_text:
+    st.write(info_text)
+else:
+    st.warning("Informasi perusahaan tidak ditemukan di file Word")
 
-# ===============================
-# PILIH SAHAM
-# ===============================
-daftar_saham = sorted(word_info.keys())
+# =========================
+# Filter Data Excel
+# =========================
+data_perusahaan = df[df["Perusahaan"] == perusahaan]
 
-kode_saham = st.selectbox(
-    "📌 Pilih Kode Saham",
-    daftar_saham
-)
-
-# ===============================
-# TAMPILKAN INFORMASI
-# ===============================
-if kode_saham:
-    st.markdown("---")
-    st.subheader(f"🏢 {kode_saham}")
-
-    col1, col2 = st.columns(2)
-
-    # ===============================
-    # INFORMASI PERUSAHAAN (WORD)
-    # ===============================
-    with col1:
-        st.markdown("### 🏭 Informasi Perusahaan")
-        st.write(word_info.get(kode_saham, "Data tidak tersedia"))
-
-    # ===============================
-    # INFORMASI SAHAM (EXCEL)
-    # ===============================
-    with col2:
-        st.markdown("### 💰 Informasi Saham")
-
-        data_saham = excel_data[
-            excel_data["Kode Saham"] == kode_saham
-        ]
-
-        if not data_saham.empty:
-            st.dataframe(data_saham, use_container_width=True)
-        else:
-            st.warning("Data saham tidak ditemukan di Excel")
-
-    st.success("Data berhasil ditampilkan ✅")
+st.subheader("📈 Data Perusahaan")
+if not data_perusahaan.empty:
+    st.dataframe(data_perusahaan)
+else:
+    st.warning("Data perusahaan tidak ditemukan di Excel")
