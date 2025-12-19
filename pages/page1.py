@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 import streamlit as st
 
 st.title("Welcome to Aku Bukan Anaconda's Homepage")
