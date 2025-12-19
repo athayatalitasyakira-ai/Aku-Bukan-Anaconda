@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 
 st.title("📉 Analisis Data Historis Saham")
-st.write("Pilih saham untuk melihat pergerakan harga historis dan penjelasannya.")
+st.write("Pilih saham untuk melihat pergerakan harga historis.")
+
 uploaded_file = st.file_uploader(
     "Upload file Excel Data Saham",
     type=["xlsx"]
@@ -10,16 +11,18 @@ uploaded_file = st.file_uploader(
 
 if uploaded_file is not None:
     df = pd.read_excel(uploaded_file)
-     df["Tanggal"] = pd.to_datetime(df["Tanggal"])
-saham = st.selectbox(
+    df["Tanggal"] = pd.to_datetime(df["Tanggal"])
+
+    saham = st.selectbox(
         "Pilih Saham Perusahaan",
         options=df.columns[1:]
     )
 
- st.subheader(f"📈 Grafik Historis Harga Saham {saham}")
+    st.subheader(f"📈 Grafik Historis Harga Saham {saham}")
     st.line_chart(
         df.set_index("Tanggal")[saham]
     )
+
     data_saham = df[saham].dropna()
 
     harga_awal = data_saham.iloc[0]
@@ -48,6 +51,5 @@ saham = st.selectbox(
     yang mencerminkan tingkat fluktuasi harga saham selama periode tersebut.
     Semakin tinggi nilai volatilitas, semakin besar risiko pergerakan harga saham.
     """)
-
 else:
     st.info("Silakan upload file Excel terlebih dahulu.")
