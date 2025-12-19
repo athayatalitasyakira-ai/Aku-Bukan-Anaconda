@@ -14,7 +14,7 @@ if not os.path.exists(FILE_PATH):
     st.stop()
 
 
-df = pd.read_excel(FILE_PATH)
+df = pd.read_excel(data_saham_baru)
 
 
 df.columns = df.columns.str.strip()
