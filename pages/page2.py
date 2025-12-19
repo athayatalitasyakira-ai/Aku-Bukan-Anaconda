@@ -11,9 +11,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru")
 
 
-if not os.path.exists(FILE_PATH):
-    st.error("❌ File data_saham.xlsx tidak ditemukan di folder data")
-    st.stop()
 
 # Baca data
 df = pd.read_excel("data_saham_baru")
