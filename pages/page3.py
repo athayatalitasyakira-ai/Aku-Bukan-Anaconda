@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 
 st.title("📉 Analisis Data Historis Saham")
-st.write("Pilih saham untuk melihat pergerakan harga historis dan penjelasannya.")
+st.write("Pilih saham untuk melihat pergerakan harga historis.")
 uploaded_file = st.file_uploader(
     "Upload file Excel Data Saham",
     type=["xlsx"]
