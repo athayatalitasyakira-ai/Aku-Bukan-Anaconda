@@ -1,27 +1,16 @@
-# ===== Python =====
 __pycache__/
 *.pyc
-*.pyo
-*.pyd
 
-# ===== Virtual Environment =====
+.ipynb_checkpoints/
+
 venv/
 .env/
 .venv/
 
-# ===== Jupyter Notebook =====
-.ipynb_checkpoints/
-
-# ===== Streamlit =====
 .streamlit/
 
-# ===== OS Files =====
-.DS_Store
-Thumbs.db
-
-# ===== IDE =====
 .vscode/
 .idea/
 
-# ===== Logs =====
-*.log
+.DS_Store
+Thumbs.db
