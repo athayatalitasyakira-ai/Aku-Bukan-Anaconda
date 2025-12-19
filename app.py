@@ -16,11 +16,16 @@ pg = st.navigation(
 pg.run()
 
 
-data_indeks["LQ45"]["ASII"] = {
-    "nama": "PT Astra International Tbk",
-    "sektor": "Otomotif",
-    "harga": "Rp 6.300",
-    "market_cap": "Rp 255 T",
-    "tahun": 1957,
-    "deskripsi": "Konglomerasi besar Indonesia."
-}
+st.set_page_config(
+    page_title="Analisis Saham",
+    layout="wide"
+)
+
+st.title("📊 Dashboard Analisis Saham")
+
+st.write("""
+Selamat datang di aplikasi analisis saham.
+
+Gunakan menu **sidebar** untuk memilih halaman
+dan melihat grafik serta analisis data saham.
+""")
