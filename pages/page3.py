@@ -17,7 +17,6 @@ def load_data():
         header=None
     )
 
-    # Rename kolom agar tidak KeyError
     df.columns = [
         "Tanggal", "Kode", "Open", "High", "Low",
         "Close", "Volume", "Adj Close",
@@ -30,7 +29,7 @@ def load_data():
 
     return df
 
-df = "Data_saham_Prakbogdata_BARU.xlsx'
+df = "Data_saham_Prakbogdata_BARU.xlsx"
 
 # ======================
 # Pilih Perusahaan
