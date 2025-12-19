@@ -1,4 +1,9 @@
 import pandas as pd
+df = pd.read_csv('data/datahargasahamcopy.csv')
+st.write(df.tail())
+
+st.write("simulasi error")
+
 import matplotlib.pyplot as plt
 from ipywidgets import interact, Dropdown
 from datetime import datetime, timedelta
@@ -53,4 +58,3 @@ def plot_saham(saham):
 
 # Buat dropdown interaktif
 interact(plot_saham, saham=Dropdown(options=saham_options, description='Pilih Saham:'));
-```
