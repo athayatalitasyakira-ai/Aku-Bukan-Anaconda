@@ -1,58 +1,70 @@
 import streamlit as st
 import pandas as pd
 
-st.title("📉 Analisis Data Historis Saham")
-
-uploaded_file = st.file_uploader(
-    "Upload file Excel Data Saham",
-    type=["xlsx", "xls"]
+st.set_page_config(
+    page_title="Data Saham",
+    layout="wide"
 )
 
-if uploaded_file is not None:
-    df = pd.read_excel(uploaded_file)
+st.title("📈 Visualisasi Data Saham")
 
-df = pd.read_excel("Data Saham Prakbigdata.csv  BARU.xlsx", header=1)
+FILE_PATH = "Data Saham Prakbigdata.csv  BARU.xlsx"
 
+@st.cache_data
+def load_data():
+    df_raw = pd.read_excel(FILE_PATH, header=None)
 
-    # Kolom saham (selain tanggal)
-    saham_list = df.columns[1:]
+    header_row = None
+    for i in range(min(5, len(df_raw))):
+        row = df_raw.iloc[i].astype(str).str.lower()
+        if row.str.contains("tanggal").any():
+            header_row = i
+            break
 
-    saham = st.selectbox(
-        "Pilih Saham Perusahaan",
-        options=saham_list
-    )
-
-    st.subheader(f"📈 Grafik Harga Saham {saham}")
-
-    chart_data = df[[tanggal_col, saham]].dropna()
-    chart_data = chart_data.set_index(tanggal_col)
-
-    st.line_chart(chart_data)
-
-    # Analisis sederhana
-    harga_awal = chart_data[saham].iloc[0]
-    harga_akhir = chart_data[saham].iloc[-1]
-    perubahan = harga_akhir - harga_awal
-    persentase = (perubahan / harga_awal) * 100
-
-    st.subheader("📝 Penjelasan")
-
-    if perubahan > 0:
-        tren = "mengalami tren kenaikan"
+    if header_row is not None:
+        df = pd.read_excel(FILE_PATH, header=header_row)
     else:
-        tren = "mengalami tren penurunan"
+        df = pd.read_excel(FILE_PATH, header=0)
 
-    st.write(
-        f"""
-        Berdasarkan data historis, harga saham **{saham}**
-        {tren} selama periode pengamatan.
+    return df
 
-        Harga awal tercatat sekitar **{harga_awal:.2f}**
-        dan harga akhir sebesar **{harga_akhir:.2f}**.
-        Perubahan harga sebesar **{perubahan:.2f}**
-        atau **{persentase:.2f}%**.
-        """
+df = load_data()
+
+df.columns = df.columns.astype(str).str.strip()
+
+if all(col.startswith("Unnamed") for col in df.columns):
+    df.columns = [
+        "Tanggal", "Kode", "Open", "High", "Low",
+        "Close", "Volume", "Adj Close",
+        "Kolom8", "Kolom9", "Kolom10", "Kolom11"
+    ]
+required_cols = ["Tanggal", "Kode"]
+missing = [c for c in required_cols if c not in df.columns]
+
+if missing:
+    st.error(f"Kolom wajib tidak ditemukan: {missing}")
+    st.write("Kolom tersedia:", df.columns)
+    st.stop()
+df["Tanggal"] = pd.to_datetime(df["Tanggal"], errors="coerce")
+df = df.dropna(subset=["Tanggal"])
+st.sidebar.header("Filter")
+
+saham_list = sorted(df["Kode"].dropna().unique())
+
+if len(saham_list) == 0:
+    st.error("Data saham kosong")
+    st.stop()
+
+selected_saham = st.sidebar.selectbox(
+    "Pilih Kode Saham",
+    options=saham_list
+)
+df_saham = df[df["Kode"] == selected_saham]
+st.subheader(f"Data Saham: {selected_saham}")
+st.dataframe(df_saham, use_container_width=True)
+if "Close" in df_saham.columns:
+    st.line_chart(
+        df_saham.set_index("Tanggal")["Close"]
     )
-
 else:
-    st.info("Silakan upload file Excel terlebih dahulu.")
+    st.warning("Kolom Close tidak tersedia")
