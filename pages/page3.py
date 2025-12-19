@@ -23,11 +23,12 @@ if uploaded_file is not None:
         options=df.columns[1:]
     )
 
-    # Grafik harga saham
-    st.subheader(f"📊 Grafik Historis Harga Saham {saham}")
-    st.line_chart(
-        df.set_index(kolom_tanggal)[saham]
-    )
+# Pastikan data saham numerik
+df[saham] = pd.to_numeric(df[saham], errors="coerce")
+
+st.line_chart(
+    df.set_index(kolom_tanggal)[saham]
+)
 
     # Analisis sederhana
     data_saham = df[saham].dropna()
