@@ -5,7 +5,7 @@ import pandas as pd
 st.title("📈 Analisis Data Saham")
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(data_saham_baru))
 FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru")
 
 
