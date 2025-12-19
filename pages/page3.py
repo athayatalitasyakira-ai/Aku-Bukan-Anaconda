@@ -49,41 +49,41 @@ yang terdiri dari:
 
 
 st.subheader("2. Statistik Deskriptif")
-st.write("""
+st.write(
 Berdasarkan statistik deskriptif, dapat disimpulkan bahwa:
 IHSG memiliki nilai rata-rata paling tinggi karena mencerminkan agregasi seluruh saham.
 LQ45 menunjukkan fluktuasi yang lebih besar dibanding IDX30.
 IDX30 relatif lebih stabil karena berisi saham-saham unggulan (blue chip).
-    """)
+    )
 st.write(data.describe())
 
 
 st.subheader("3. Analisis Pergerakan Indeks")
-st.write("""
+st.write(
 Pergerakan ketiga indeks menunjukkan **pola yang cenderung searah**.
 Hal ini menandakan adanya korelasi positif antar indeks saham.
 
 Saat IHSG mengalami penurunan, LQ45 biasanya turun lebih tajam.
 IDX30 cenderung mengalami perubahan yang lebih kecil,
   menunjukkan tingkat risiko yang lebih rendah.
-""")
+)
 
 
 st.subheader("4. Analisis Risiko dan Volatilitas")
-st.write("""
+st.write(
 Dari pola pergerakan data:
 LQ45  memiliki volatilitas paling tinggi sehingga cocok bagi investor agresif.
 IHSG mencerminkan kondisi pasar secara umum.
 IDX30 lebih stabil dan cocok untuk investasi jangka menengah hingga panjang.
-""")
+)
 
 
 st.subheader("5. Kesimpulan")
-st.write("""
+st.write(
 Berdasarkan hasil analisis data Excel:
 Ketiga indeks saham bergerak searah dan saling memengaruhi.
 LQ45 paling sensitif terhadap perubahan kondisi pasar.
 IDX30 menunjukkan stabilitas tertinggi.
 Data ini dapat digunakan sebagai dasar pengambilan keputusan investasi
    maupun analisis kondisi pasar modal Indonesia.
-""")
+)
