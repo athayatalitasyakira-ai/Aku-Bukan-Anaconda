@@ -2,3 +2,15 @@
 *.ipynb
 pages_bak/
 untitled*.py
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Streamlit config
+.streamlit/
+
+# Excel temp files
+~$*.xlsx

@@ -1,39 +1,42 @@
+import os
 import streamlit as st
 import pandas as pd
 
-st.title("📊 Nilai Saham Perusahaan LQ45")
+st.title("📈 Analisis Data Saham")
 
-# =========================
-# List Perusahaan LQ45
-# =========================
-lq45 = [
-    "AADI","ADRO","AMRT","ANTM","ARTO","ASII","BBCA","BBNI","BBRI","BMRI",
-    "BRPT","BUKA","CPIN","GOTO","INCO","INDF","INTP","KLBF","MDKA","MEDC",
-    "MYOR","PGEO","PTBA","SMGR","SRTG","TBIG","TLKM","TOWR","TPIA","UNTR"
-]
 
-# =========================
-# Dropdown pilihan perusahaan
-# =========================
-perusahaan = st.selectbox("Pilih Perusahaan", lq45)
+BASE_DIR = os.path.dirname(os.path.dirname(data_saham_baru))
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru")
 
-# =========================
-# Load Excel
-# =========================
-df = pd.read_excel("Data Saham Prakbigdata (1).xlsx")
+
+if not os.path.exists(FILE_PATH):
+    st.error("File data_saham.xlsx tidak ditemukan di folder data")
+    st.stop()
+
+
+df = pd.read_excel(FILE_PATH)
+
+
 df.columns = df.columns.str.strip()
 
-# =========================
-# Filter data sesuai pilihan
-# =========================
-data_perusahaan = df[df["Perusahaan"] == perusahaan]
+st.subheader("📋 Preview Data")
+st.dataframe(df)
 
-# =========================
-# Tampilkan Nilai
-# =========================
-st.subheader("📈 Data Nilai")
+st.subheader("🔍 Daftar Kolom")
+st.write(df.columns.tolist())
 
-if not data_perusahaan.empty:
-    st.dataframe(data_perusahaan[["Tanggal", "Nilai"]])
-else:
-    st.warning("Data perusahaan tidak ditemukan di Excel")
+
+kolom_perusahaan = st.selectbox(
+    "Pilih kolom nama perusahaan:",
+    df.columns
+)
+
+perusahaan = st.selectbox(
+    "Pilih perusahaan:",
+    df[kolom_perusahaan].dropna().unique()
+)
+
+data_perusahaan = df[df[kolom_perusahaan] == perusahaan]
+
+st.subheader(f"📌 Data untuk {perusahaan}")
+st.dataframe(data_perusahaan)
