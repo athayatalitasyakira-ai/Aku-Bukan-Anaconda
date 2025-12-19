@@ -1,26 +1,16 @@
 import streamlit as st
 import pandas as pd
 
-st.set_page_config(
-    page_title="Analisis Saham",
-    layout="centered"
-)
+st.title("📈 Analisis Data Saham")
 
-st.title("📊 Analisis Data Historis Saham")
-st.write(
-    "Pilih saham perusahaan untuk melihat grafik harga historis "
-    "beserta penjelasan pergerakan harganya."
-)
-
-# Upload file Excel
 uploaded_file = st.file_uploader(
-    "📂 Upload File Excel Data Saham",
+    "Upload file Excel data saham",
     type=["xlsx"]
 )
 
 if uploaded_file is not None:
-    # Baca data
     df = pd.read_excel(uploaded_file)
+
 
     # Konversi kolom tanggal
     df["Tanggal"] = pd.to_datetime(df["Tanggal"])
