@@ -1,41 +1,58 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Visualisasi Harga Saham")
+st.title("📉 Analisis Data Historis Saham")
 
 uploaded_file = st.file_uploader(
-    "Upload data saham", 
-    type=["csv", "xlsx"]
+    "Upload file Excel Data Saham",
+    type=["xlsx", "xls"]
 )
 
 if uploaded_file is not None:
-    # Baca file
-    if uploaded_file.name.endswith(".csv"):
-        df = pd.read_csv(uploaded_file)
+    df = pd.read_excel(uploaded_file)
+
+df = pd.read_excel("Data Saham Prakbigdata.csv  BARU.xlsx", header=1)
+
+
+    # Kolom saham (selain tanggal)
+    saham_list = df.columns[1:]
+
+    saham = st.selectbox(
+        "Pilih Saham Perusahaan",
+        options=saham_list
+    )
+
+    st.subheader(f"📈 Grafik Harga Saham {saham}")
+
+    chart_data = df[[tanggal_col, saham]].dropna()
+    chart_data = chart_data.set_index(tanggal_col)
+
+    st.line_chart(chart_data)
+
+    # Analisis sederhana
+    harga_awal = chart_data[saham].iloc[0]
+    harga_akhir = chart_data[saham].iloc[-1]
+    perubahan = harga_akhir - harga_awal
+    persentase = (perubahan / harga_awal) * 100
+
+    st.subheader("📝 Penjelasan")
+
+    if perubahan > 0:
+        tren = "mengalami tren kenaikan"
     else:
-        df = pd.read_excel(uploaded_file)
+        tren = "mengalami tren penurunan"
 
-    # Tampilkan kolom untuk cek
-    st.write("Kolom data:", df.columns.tolist())
+    st.write(
+        f"""
+        Berdasarkan data historis, harga saham **{saham}**
+        {tren} selama periode pengamatan.
 
-    # WAJIB: pastikan nama kolom sesuai
-    df["Tanggal"] = pd.to_datetime(df["Tanggal"])
-    df = df.sort_values("Tanggal")
+        Harga awal tercatat sekitar **{harga_awal:.2f}**
+        dan harga akhir sebesar **{harga_akhir:.2f}**.
+        Perubahan harga sebesar **{perubahan:.2f}**
+        atau **{persentase:.2f}%**.
+        """
+    )
 
-    # Jadikan Tanggal sebagai index
-    df = df.set_index("Tanggal")
-
-    # Pastikan kolom numerik
-    df["Close"] = pd.to_numeric(df["Close"], errors="coerce")
-
-    # Line chart (INI YANG BENAR)
-    st.line_chart(df["Close"])
-
-    # Penjelasan
-    st.markdown("""
-    **Penjelasan:**  
-    Grafik di atas menunjukkan pergerakan harga penutupan (*closing price*) saham 
-    berdasarkan waktu. Sumbu horizontal merepresentasikan tanggal perdagangan, 
-    sedangkan sumbu vertikal menunjukkan nilai harga saham. Visualisasi ini membantu 
-    pengguna untuk mengamati tren kenaikan atau penurunan harga saham dari waktu ke waktu.
-    """)
+else:
+    st.info("Silakan upload file Excel terlebih dahulu.")
