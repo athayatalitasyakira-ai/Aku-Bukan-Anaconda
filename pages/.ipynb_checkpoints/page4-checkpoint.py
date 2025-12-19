@@ -1,7 +1,10 @@
+ HEAD
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from ipywidgets import interact, Dropdown
 from datetime import datetime, timedelta
+<<<<<<< HEAD
 
 def excel_serial_to_date(serial):
     if isinstance(serial, (int, float)):
@@ -40,8 +43,7 @@ def plot_saham(saham):
     plt.xticks(rotation=45)
     plt.tight_layout()
     plt.show()
-    
-    # Penjelasan di bawah grafik
+# Penjelasan di bawah grafik
     print(f"\nPenjelasan Grafik untuk {saham}:")
     print("Grafik ini menampilkan data historis harga saham dari tanggal terendah hingga tertinggi.")
     print(f"Data dimulai dari {df['Tanggal'].min().strftime('%Y-%m-%d')} hingga {df['Tanggal'].max().strftime('%Y-%m-%d')}.")
@@ -52,3 +54,6 @@ def plot_saham(saham):
 
 # Buat dropdown interaktif
 interact(plot_saham, saham=Dropdown(options=saham_options, description='Pilih Saham:'));
+=======
+ 69436736987791aa93a728a773631f3e54fbd1f0
+>>>>>>> debd6586cc6867eb143bc7352253bfcdc49bcfed
