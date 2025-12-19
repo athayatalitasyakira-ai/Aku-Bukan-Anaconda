@@ -3,17 +3,14 @@ import pandas as pd
 
 st.title("📈 Analisis Data Saham")
 
-# Upload file (PALING AMAN, TIDAK PERLU PATH)
 uploaded_file = st.file_uploader(
     "Upload file Excel data saham",
     type=["xlsx"]
 )
 
 if uploaded_file is not None:
-    
-    df = pd.read_excel(data_saham_baru)
+    df = pd.read_excel(uploaded_file)
 
-    
     df.columns = df.columns.str.strip()
 
     st.subheader("📋 Preview Data")
@@ -22,7 +19,6 @@ if uploaded_file is not None:
     st.subheader("🔍 Nama Kolom")
     st.write(df.columns.tolist())
 
-    
     kolom_perusahaan = st.selectbox(
         "Pilih kolom nama perusahaan:",
         df.columns
