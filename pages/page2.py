@@ -8,7 +8,7 @@ st.title("📊 Data Saham")
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
-FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_")
+FILE_PATH = os.path.join(BASE_DIR, "data", "Data_Saham_Prakbigdata.csv_BARU")
 
 
 if not os.path.exists(FILE_PATH):
@@ -16,7 +16,7 @@ if not os.path.exists(FILE_PATH):
     st.stop()
 
 
-df = pd.read_excel('data_saham_')
+df = pd.read_excel('Data_Saham_Prakbigdata.csv_BARU')
 
 st.success("✅ Data berhasil dimuat")
 
