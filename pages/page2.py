@@ -1,111 +1,82 @@
 import streamlit as st
-import plotly.express as px
-import numpy as np
-import matplotlib.pyplot as plt
+import pandas as pd
+from docx import Document
 
-import streamlit as st
+# ===============================
+# FUNGSI BACA DATA WORD
+# ===============================
+def load_word_info(file_path):
+    doc = Document(file_path)
+    data = {}
 
-# ==========================
-# TEMPAT MENYIMPAN DATA
-# ==========================
-data_indeks = {
-    "Composite Index (IHSG)": {
-        "BBCA": {
-            "nama": "PT Bank Central Asia Tbk",
-            "sektor": "Perbankan",
-            "harga": "Rp 9.750",
-            "market_cap": "Rp 1.200 T",
-            "tahun": 1957,
-            "deskripsi": "Bank swasta terbesar di Indonesia."
-        },
-        "TLKM": {
-            "nama": "PT Telkom Indonesia Tbk",
-            "sektor": "Telekomunikasi",
-            "harga": "Rp 4.200",
-            "market_cap": "Rp 415 T",
-            "tahun": 1965,
-            "deskripsi": "Perusahaan telekomunikasi milik negara."
-        }
-    },
+    for para in doc.paragraphs:
+        text = para.text.strip()
+        if "(" in text and ":" in text:
+            kode = text.split("(")[0].strip("- ").strip()
+            deskripsi = text.split("):")[-1].strip()
+            data[kode] = deskripsi
 
-    "LQ45": {
-        "BBRI": {
-            "nama": "PT Bank Rakyat Indonesia Tbk",
-            "sektor": "Perbankan",
-            "harga": "Rp 5.150",
-            "market_cap": "Rp 780 T",
-            "tahun": 1895,
-            "deskripsi": "Bank fokus pembiayaan UMKM."
-        },
-        "ASII": {
-            "nama": "PT Astra International Tbk",
-            "sektor": "Otomotif",
-            "harga": "Rp 6.300",
-            "market_cap": "Rp 255 T",
-            "tahun": 1957,
-            "deskripsi": "Konglomerasi multinasional Indonesia."
-        }
-    },
+    return data
 
-    "IDX30": {
-        "BMRI": {
-            "nama": "PT Bank Mandiri Tbk",
-            "sektor": "Perbankan",
-            "harga": "Rp 6.100",
-            "market_cap": "Rp 570 T",
-            "tahun": 1998,
-            "deskripsi": "Bank BUMN terbesar berdasarkan aset."
-        }
-    }
-}
+# ===============================
+# LOAD DATA
+# ===============================
+word_info = load_word_info("INFORMASI.docx")
+excel_data = pd.read_excel("Data Saham Prakbigdata.csv  BARU.xlsx")
 
-# ==========================
-# KONFIGURASI HALAMAN
-# ==========================
+# Pastikan kolom kode saham ada
+excel_data["Kode Saham"] = excel_data["Kode Saham"].str.upper()
+
+# ===============================
+# SETUP PAGE
+# ===============================
 st.set_page_config(
     page_title="Informasi Saham Indonesia",
     layout="wide"
 )
 
-st.title("📊 Dashboard Informasi Saham")
-st.caption("Pilih indeks dan saham untuk melihat detail perusahaan")
+st.title("📊 Informasi Saham Indonesia")
+st.caption("Pilih saham untuk melihat informasi perusahaan & data saham")
 
-# ==========================
-# PILIH INDEKS
-# ==========================
-indeks = st.selectbox(
-    "📌 Pilih Indeks Saham",
-    options=list(data_indeks.keys())
-)
-
-# ==========================
+# ===============================
 # PILIH SAHAM
-# ==========================
+# ===============================
+daftar_saham = sorted(word_info.keys())
+
 kode_saham = st.selectbox(
-    "📈 Pilih Kode Saham",
-    options=list(data_indeks[indeks].keys())
+    "📌 Pilih Kode Saham",
+    daftar_saham
 )
 
-# ==========================
+# ===============================
 # TAMPILKAN INFORMASI
-# ==========================
+# ===============================
 if kode_saham:
-    saham = data_indeks[indeks][kode_saham]
-
-    st.subheader(f"🏢 {saham['nama']} ({kode_saham})")
+    st.markdown("---")
+    st.subheader(f"🏢 {kode_saham}")
 
     col1, col2 = st.columns(2)
 
+    # ===============================
+    # INFORMASI PERUSAHAAN (WORD)
+    # ===============================
     with col1:
         st.markdown("### 🏭 Informasi Perusahaan")
-        st.write(f"**Sektor:** {saham['sektor']}")
-        st.write(f"**Tahun Berdiri:** {saham['tahun']}")
-        st.write(f"**Deskripsi:** {saham['deskripsi']}")
+        st.write(word_info.get(kode_saham, "Data tidak tersedia"))
 
+    # ===============================
+    # INFORMASI SAHAM (EXCEL)
+    # ===============================
     with col2:
         st.markdown("### 💰 Informasi Saham")
-        st.write(f"**Harga Saham:** {saham['harga']}")
-        st.write(f"**Kapitalisasi Pasar:** {saham['market_cap']}")
 
-    st.markdown("---")
-    st.success("Data saham berhasil ditampilkan ✅")
+        data_saham = excel_data[
+            excel_data["Kode Saham"] == kode_saham
+        ]
+
+        if not data_saham.empty:
+            st.dataframe(data_saham, use_container_width=True)
+        else:
+            st.warning("Data saham tidak ditemukan di Excel")
+
+    st.success("Data berhasil ditampilkan ✅")
