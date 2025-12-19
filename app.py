@@ -24,4 +24,3 @@ data_indeks["LQ45"]["ASII"] = {
     "tahun": 1957,
     "deskripsi": "Konglomerasi besar Indonesia."
 }
- (Update app.py)

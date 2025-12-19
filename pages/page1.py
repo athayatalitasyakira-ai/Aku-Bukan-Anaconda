@@ -21,4 +21,3 @@ st.write("Data diambil dari daily IDX indices")
 st.write("Alat yang digunakan excel, github, git bash, streamlit, dan anaconda promt")
 st.write("꒷꒦︶꒷꒦︶ ๋ ࣭ ⭑꒷꒦꒷꒦︶꒷꒦︶ ๋ ࣭ ⭑꒷꒦꒷꒦︶꒷꒦︶ ๋ ࣭ ⭑꒷꒦꒷꒦︶꒷꒦︶ ๋ ࣭ ⭑꒷꒦꒷꒦︶꒷꒦︶ ๋ ࣭ ⭑꒷꒦꒷꒦︶꒷꒦︶ ๋ ࣭ ⭑꒷꒦")
 
->>>>>>> ca4c7847c437a945477eea06675d93a8763a119e
