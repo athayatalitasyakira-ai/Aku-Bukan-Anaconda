@@ -21,12 +21,13 @@ perusahaan = st.selectbox("Pilih Perusahaan", lq45)
 # =========================
 # Load Excel (AMAN)
 # =========================
-BASE_DIR = Path(__file__).resolve().parent.parent
-file_path = "Data Saham Prakbigdata (1).xlsx"
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+file_path = os.path.join(BASE_DIR, "data", "Data Saham Prakbigdata (1).xlsx")
+
 st.write("File exists:", os.path.exists(file_path))
 
 df = pd.read_excel(file_path)
-df.columns = df.columns.str.strip()
+st.dataframe(df)
 
 # =========================
 # Filter data
