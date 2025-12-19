@@ -30,6 +30,3 @@ Selamat datang di aplikasi analisis saham.
 Gunakan menu **sidebar** untuk memilih halaman
 dan melihat grafik serta analisis data saham.
 """)
- 
-
- (Update app.py dan page1, cleanup repository)
