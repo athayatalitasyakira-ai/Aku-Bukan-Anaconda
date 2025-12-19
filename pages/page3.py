@@ -1,28 +1,43 @@
 import streamlit as st
 import pandas as pd
 
-st.title("📉 Analisis Data Historis Saham")
-st.write("Pilih saham untuk melihat pergerakan harga historis.")
+st.set_page_config(
+    page_title="Analisis Saham",
+    layout="centered"
+)
 
+st.title("📊 Analisis Data Historis Saham")
+st.write(
+    "Pilih saham perusahaan untuk melihat grafik harga historis "
+    "beserta penjelasan pergerakan harganya."
+)
+
+# Upload file Excel
 uploaded_file = st.file_uploader(
-    "Upload file Excel Data Saham",
+    "📂 Upload File Excel Data Saham",
     type=["xlsx"]
 )
 
 if uploaded_file is not None:
+    # Baca data
     df = pd.read_excel(uploaded_file)
+
+    # Konversi kolom tanggal
     df["Tanggal"] = pd.to_datetime(df["Tanggal"])
 
+    # Pilih saham
     saham = st.selectbox(
-        "Pilih Saham Perusahaan",
+        "📌 Pilih Saham Perusahaan",
         options=df.columns[1:]
     )
 
+    # Grafik
     st.subheader(f"📈 Grafik Historis Harga Saham {saham}")
     st.line_chart(
         df.set_index("Tanggal")[saham]
     )
 
+    # Analisis sederhana
     data_saham = df[saham].dropna()
 
     harga_awal = data_saham.iloc[0]
@@ -31,25 +46,24 @@ if uploaded_file is not None:
     persentase = (perubahan / harga_awal) * 100
     volatilitas = data_saham.std()
 
-    st.subheader("📝 Penjelasan Data Historis")
+    tren = "mengalami tren kenaikan" if perubahan > 0 else "mengalami tren penurunan"
 
-    if perubahan > 0:
-        tren = "mengalami tren kenaikan"
-    else:
-        tren = "mengalami tren penurunan"
+    # Penjelasan
+    st.subheader("📝 Penjelasan Data Historis Saham")
 
     st.write(f"""
     Berdasarkan data historis yang ditampilkan, harga saham **{saham}**
     {tren} selama periode pengamatan.
 
-    Pada awal periode, harga saham berada di kisaran **{harga_awal:.2f}**,
-    dan pada akhir periode tercatat sebesar **{harga_akhir:.2f}**.
-    Hal ini menunjukkan perubahan harga sebesar **{perubahan:.2f}**
+    Pada awal periode, harga saham tercatat sebesar **{harga_awal:.2f}**,
+    sedangkan pada akhir periode mencapai **{harga_akhir:.2f}**.
+    Dengan demikian, terjadi perubahan harga sebesar **{perubahan:.2f}**
     atau sekitar **{persentase:.2f}%**.
 
-    Tingkat volatilitas saham ini tergolong **{volatilitas:.2f}**,
-    yang mencerminkan tingkat fluktuasi harga saham selama periode tersebut.
-    Semakin tinggi nilai volatilitas, semakin besar risiko pergerakan harga saham.
+    Nilai volatilitas saham sebesar **{volatilitas:.2f}** menunjukkan
+    tingkat fluktuasi harga selama periode tersebut. Semakin tinggi
+    volatilitas, maka risiko pergerakan harga saham semakin besar.
     """)
+
 else:
     st.info("Silakan upload file Excel terlebih dahulu.")
