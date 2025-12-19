@@ -1,47 +1,97 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
-from datetime import datetime, timedelta
+import os
 
-st.set_page_config(page_title="Data Saham", layout="wide")
+st.set_page_config(page_title="Perbandingan Harga Saham", layout="wide")
 
-# Fungsi konversi tanggal Excel
-def excel_serial_to_date(x):
-    if isinstance(x, (int, float)):
-        return datetime(1899, 12, 30) + timedelta(days=x)
-    try:
-        return pd.to_datetime(x)
-    except Exception:
-        return pd.NaT
+st.title("📈 Perbandingan Harga Saham")
+st.write("Visualisasi dan analisis data harga saham")
 
-st.title("📈 Visualisasi Data Harga Saham")
-
-# Load data
-df = pd.read_excel("Data Harga Saham Prakbigdata.xlsx")
-
-df["Tanggal"] = df["Tanggal"].apply(excel_serial_to_date)
-df = df.dropna(subset=["Tanggal"])
-df = df.sort_values("Tanggal")
-
-# Pilih saham
-saham = st.selectbox(
-    "Pilih Indeks Saham",
-    ["Composite_Index", "LQ45", "IDX30"]
+# ===============================
+# LOAD DATA EXCEL (AMAN CLOUD)
+# ===============================
+file_path = os.path.join(
+    os.path.dirname(__file__),
+    "..",
+    "Data Harga Saham Prakbigdata.xlsx"
 )
 
-# Plot
-fig, ax = plt.subplots(figsize=(10, 5))
-ax.plot(df["Tanggal"], df[saham])
-ax.set_title(f"Pergerakan {saham}")
-ax.set_xlabel("Tanggal")
-ax.set_ylabel("Harga")
-ax.grid(True)
+try:
+    df = pd.read_excel(file_path)
+except FileNotFoundError:
+    st.error("❌ File Excel tidak ditemukan. Pastikan sudah di-upload ke GitHub.")
+    st.stop()
 
-st.pyplot(fig)
+# ===============================
+# PREVIEW DATA
+# ===============================
+st.subheader("📄 Preview Data")
+st.dataframe(df, use_container_width=True)
 
-# Statistik
-st.subheader("📊 Ringkasan Statistik")
-st.write(f"Periode data : {df['Tanggal'].min().date()} s.d {df['Tanggal'].max().date()}")
-st.write(f"Harga terendah : {df[saham].min():.2f}")
-st.write(f"Harga tertinggi : {df[saham].max():.2f}")
-st.write(f"Rata-rata : {df[saham].mean():.2f}")
+# ===============================
+# VALIDASI KOLOM
+# ===============================
+required_cols = ["Tanggal", "Kode_Saham", "Harga"]
+for col in required_cols:
+    if col not in df.columns:
+        st.error(f"❌ Kolom '{col}' tidak ditemukan di data")
+        st.stop()
+
+df["Tanggal"] = pd.to_datetime(df["Tanggal"])
+
+# ===============================
+# FILTER SAHAM
+# ===============================
+st.subheader("🔎 Filter Saham")
+
+list_saham = df["Kode_Saham"].unique().tolist()
+selected_saham = st.multiselect(
+    "Pilih Kode Saham",
+    options=list_saham,
+    default=list_saham[:2]
+)
+
+if not selected_saham:
+    st.warning("⚠️ Pilih minimal 1 saham")
+    st.stop()
+
+df_filtered = df[df["Kode_Saham"].isin(selected_saham)]
+
+# ===============================
+# GRAFIK HARGA SAHAM
+# ===============================
+st.subheader("📊 Grafik Harga Saham")
+
+st.line_chart(
+    df_filtered,
+    x="Tanggal",
+    y="Harga",
+    color="Kode_Saham"
+)
+
+# ===============================
+# STATISTIK
+# ===============================
+st.subheader("📌 Statistik Harga Saham")
+
+statistik = (
+    df_filtered
+    .groupby("Kode_Saham")["Harga"]
+    .agg(["min", "max", "mean"])
+    .reset_index()
+)
+
+st.dataframe(statistik, use_container_width=True)
+
+# ===============================
+# KESIMPULAN OTOMATIS
+# ===============================
+st.subheader("📝 Kesimpulan Singkat")
+
+for _, row in statistik.iterrows():
+    st.write(
+        f"- Saham **{row['Kode_Saham']}** memiliki "
+        f"harga terendah **{row['min']:.2f}**, "
+        f"tertinggi **{row['max']:.2f}**, "
+        f"dan rata-rata **{row['mean']:.2f}**"
+    )

@@ -12,5 +12,3 @@ pg = st.navigation(
     position="sidebar",
     expanded=True
 )
-
-pg.run()
