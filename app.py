@@ -12,3 +12,16 @@ pg = st.navigation(
     position="sidebar",
     expanded=True
 )
+
+pg.run()
+
+
+data_indeks["LQ45"]["ASII"] = {
+    "nama": "PT Astra International Tbk",
+    "sektor": "Otomotif",
+    "harga": "Rp 6.300",
+    "market_cap": "Rp 255 T",
+    "tahun": 1957,
+    "deskripsi": "Konglomerasi besar Indonesia."
+}
+ (Update app.py)
