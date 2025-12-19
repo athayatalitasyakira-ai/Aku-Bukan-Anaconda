@@ -2,9 +2,7 @@ matplotlib==3.10.7
 numpy==2.3.5
 plotly==6.3.1
 streamlit==1.51.0
-df = pd.read_excel(
-    "Data Saham Prakbigdata.csv  BARU.xlsx",
-    header=None,
-    engine="openpyxl"
-)
+pandas
+openpyxl
+
 
