@@ -1,98 +1,47 @@
 import streamlit as st
+import pandas as pd
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 
-# ==========================
-# DATA SAHAM (SUMBER DATA)
-# ==========================
-data_indeks = {
-    "Composite Index (IHSG)": {
-        "BBCA": {
-            "nama": "PT Bank Central Asia Tbk",
-            "sektor": "Perbankan",
-            "harga": "Rp 9.750",
-            "market_cap": "Rp 1.200 Triliun",
-            "tahun": 1957,
-            "deskripsi": "Bank swasta terbesar di Indonesia."
-        },
-        "TLKM": {
-            "nama": "PT Telkom Indonesia Tbk",
-            "sektor": "Telekomunikasi",
-            "harga": "Rp 4.200",
-            "market_cap": "Rp 415 Triliun",
-            "tahun": 1965,
-            "deskripsi": "Perusahaan telekomunikasi BUMN."
-        }
-    },
+st.set_page_config(page_title="Data Saham", layout="wide")
 
-    "LQ45": {
-        "BBRI": {
-            "nama": "PT Bank Rakyat Indonesia Tbk",
-            "sektor": "Perbankan",
-            "harga": "Rp 5.150",
-            "market_cap": "Rp 780 Triliun",
-            "tahun": 1895,
-            "deskripsi": "Fokus pembiayaan UMKM."
-        },
-        "ASII": {
-            "nama": "PT Astra International Tbk",
-            "sektor": "Otomotif",
-            "harga": "Rp 6.300",
-            "market_cap": "Rp 255 Triliun",
-            "tahun": 1957,
-            "deskripsi": "Konglomerasi multinasional Indonesia."
-        }
-    },
+# Fungsi konversi tanggal Excel
+def excel_serial_to_date(x):
+    if isinstance(x, (int, float)):
+        return datetime(1899, 12, 30) + timedelta(days=x)
+    try:
+        return pd.to_datetime(x)
+    except Exception:
+        return pd.NaT
 
-    "IDX30": {
-        "BMRI": {
-            "nama": "PT Bank Mandiri Tbk",
-            "sektor": "Perbankan",
-            "harga": "Rp 6.100",
-            "market_cap": "Rp 570 Triliun",
-            "tahun": 1998,
-            "deskripsi": "Bank BUMN terbesar berdasarkan aset."
-        }
-    }
-}
+st.title("📈 Visualisasi Data Harga Saham")
 
-# ==========================
-# TAMPILAN PAGE 4
-# ==========================
-st.title("📊 Page 4 – Informasi Saham")
-st.write("Pilih indeks dan saham untuk melihat informasi lengkap perusahaan")
+# Load data
+df = pd.read_excel("Data Harga Saham Prakbigdata.xlsx")
 
-# ==========================
-# PILIH INDEKS
-# ==========================
-indeks = st.selectbox(
-    "📌 Pilih Indeks Saham",
-    list(data_indeks.keys())
+df["Tanggal"] = df["Tanggal"].apply(excel_serial_to_date)
+df = df.dropna(subset=["Tanggal"])
+df = df.sort_values("Tanggal")
+
+# Pilih saham
+saham = st.selectbox(
+    "Pilih Indeks Saham",
+    ["Composite_Index", "LQ45", "IDX30"]
 )
 
-# ==========================
-# PILIH SAHAM
-# ==========================
-kode_saham = st.selectbox(
-    "📈 Pilih Kode Saham",
-    list(data_indeks[indeks].keys())
-)
+# Plot
+fig, ax = plt.subplots(figsize=(10, 5))
+ax.plot(df["Tanggal"], df[saham])
+ax.set_title(f"Pergerakan {saham}")
+ax.set_xlabel("Tanggal")
+ax.set_ylabel("Harga")
+ax.grid(True)
 
-# ==========================
-# TAMPILKAN DATA
-# ==========================
-saham = data_indeks[indeks][kode_saham]
+st.pyplot(fig)
 
-st.markdown("---")
-st.subheader(f"🏢 {saham['nama']} ({kode_saham})")
-
-col1, col2 = st.columns(2)
-
-with col1:
-    st.markdown("### 🏭 Informasi Perusahaan")
-    st.write(f"*Sektor:* {saham['sektor']}")
-    st.write(f"*Tahun Berdiri:* {saham['tahun']}")
-    st.write(f"*Deskripsi:* {saham['deskripsi']}")
-
-with col2:
-    st.markdown("### 💰 Informasi Saham")
-    st.write(f"*Harga Saham:* {saham['harga']}")
-    st.write(f"*Kapitalisasi Pasar:* {saham['market_cap']}")
+# Statistik
+st.subheader("📊 Ringkasan Statistik")
+st.write(f"Periode data : {df['Tanggal'].min().date()} s.d {df['Tanggal'].max().date()}")
+st.write(f"Harga terendah : {df[saham].min():.2f}")
+st.write(f"Harga tertinggi : {df[saham].max():.2f}")
+st.write(f"Rata-rata : {df[saham].mean():.2f}")
