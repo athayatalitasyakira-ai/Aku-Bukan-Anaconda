@@ -1,41 +1,43 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 
-st.title("📊 Data Saham")
+st.title("📊 Grafik Semua Saham")
 
-
-BASE_DIR = os.path.dirname(os.path.dirname('Data Saham Prakbigdata.csv BARU'))
-
-
-FILE_PATH = os.path.join(BASE_DIR, 'Data_Saham_Prakbigdata.csv_BARU')
-
+# -----------------------------
+# Path file Excel
+# -----------------------------
+BASE_DIR = os.getcwd()
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
 
 if not os.path.exists(FILE_PATH):
-    st.error("❌ File data_saham.xlsx tidak ditemukan di folder data")
+    st.error("❌ File Excel tidak ditemukan di folder data")
     st.stop()
 
+# -----------------------------
+# Baca data
+# -----------------------------
+df = pd.read_excel(FILE_PATH, engine="openpyxl")
+df.columns = df.columns.str.strip()  # bersihkan spasi di nama kolom
 
-df = pd.read_excel('Data_Saham_Prakbigdata.csv_BARU')
-
-st.success("✅ Data berhasil dimuat")
-
-
-st.write("Kolom tersedia:", df.columns.tolist())
-
-
-if "Perusahaan" not in df.columns:
-    st.error("❌ Kolom 'Perusahaan' tidak ditemukan di file Excel")
+# -----------------------------
+# Pilih kolom harga saham
+# -----------------------------
+numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+if not numeric_cols:
+    st.error("❌ Tidak ada kolom numeric untuk diplot")
     st.stop()
 
+st.subheader("📈 Grafik Semua Saham")
 
-perusahaan = st.selectbox(
-    "Pilih Perusahaan",
-    df["Perusahaan"].unique()
-)
-
-
-data_perusahaan = df[df["Perusahaan"] == perusahaan]
-
-st.subheader("📈 Detail Data")
-st.dataframe(data_perusahaan)
+# -----------------------------
+# Plot semua kolom numeric
+# -----------------------------
+fig, ax = plt.subplots(figsize=(10, 6))
+df[numeric_cols].plot(ax=ax)  # plot semua kolom numeric
+ax.set_xlabel("Baris / Index")
+ax.set_ylabel("Harga Saham")
+ax.set_title("Pergerakan Semua Saham")
+ax.legend(numeric_cols)
+st.pyplot(fig)

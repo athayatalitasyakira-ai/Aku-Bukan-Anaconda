@@ -1,89 +1,96 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import os
 
-st.set_page_config(page_title="Grafik Data Saham", layout="wide")
+st.set_page_config(page_title="Perbandingan Saham", layout="wide")
+st.title("📊 Perbandingan Saham")
 
-st.title("📈 Grafik Data Saham")
+# -----------------------------
+# Path file Excel
+# -----------------------------
+BASE_DIR = os.getcwd()
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
 
-@st.cache_data
-def load_data():
-    return pd.read_excel("Data Saham Prakbigdata.xlsx")
+if not os.path.exists(FILE_PATH):
+    st.error("❌ File Excel tidak ditemukan di folder 'data'")
+    st.stop()
 
-try:
-    df = load_data()
-    st.success("Data berhasil dimuat")
+# -----------------------------
+# Baca data
+# -----------------------------
+df = pd.read_excel(FILE_PATH, engine="openpyxl")
+df.columns = df.columns.str.strip()  # bersihkan spasi di kolom
 
-    # Tampilkan data
-    st.subheader("Preview Data")
-    st.dataframe(df)
+st.subheader("📌 Tabel Data Saham")
+st.dataframe(df)  # tampil seluruh data
 
-    # Pilih kolom numerik untuk grafik
-    numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns
+# -----------------------------
+# Pilih kolom numeric (harga saham)
+# -----------------------------
+numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
+if not numeric_cols:
+    st.error("❌ Tidak ada kolom numeric untuk diplot")
+    st.stop()
 
-    if len(numeric_cols) > 0:
-        col = st.selectbox("Pilih kolom untuk grafik", numeric_cols)
+# -----------------------------
+# Multiselect interaktif untuk memilih saham
+# -----------------------------
+selected_stocks = st.multiselect(
+    "Pilih saham yang ingin dibandingkan:",
+    options=numeric_cols,
+    default=numeric_cols  # default semua kolom
+)
 
-        st.subheader(f"Grafik {col}")
-        st.line_chart(df[col])
-    else:
-        st.warning("Tidak ada kolom numerik untuk dibuat grafik")
+if selected_stocks:
+    st.subheader("📈 Grafik Perbandingan Saham")
+    fig, ax = plt.subplots(figsize=(12,6))
+    df[selected_stocks].plot(ax=ax)
+    ax.set_xlabel("Index / Waktu")
+    ax.set_ylabel("Harga Saham")
+    ax.set_title("Perbandingan Saham Terpilih")
+    ax.legend(selected_stocks)
+    st.pyplot(fig)
 
-except Exception as e:
-    st.error("Gagal membuka file data")
-    st.code(str(e))
+st.write("Berdasarkan data pergerakan indeks saham dari januari hingga Desember 2025, ketiga indeks—Composite Index, LQ45, dan IDX30—menunjukkan tren kenaikan secara umum, meskipun disertai volatilitas yang signifikan. Composite Index naik dari sekitar 7.163 menjadi 8.650, sementara LQ45 dan IDX30 juga mengalami peningkatan serupa. Pasar sempat mengalami koreksi tajam pada Februari–Maret 2025, dengan Composite Index mencapai titik terendah di 6.161, namun berhasil pulih dan bahkan mencatat level tertinggi baru menjelang akhir periode. Saham blue-chip dalam LQ45 dan IDX30 tampak lebih stabil dibandingkan indeks luas, mencerminkan ketahanan yang lebih baik selama fase fluktuasi.")
+    
+import streamlit as st
+import pandas as pd
+import os
 
+st.title("🏆 Ranking Saham Berdasarkan Pertumbuhan")
 
+# Path file Excel
+BASE_DIR = os.getcwd()
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
 
+# Cek file
+if not os.path.exists(FILE_PATH):
+    st.error("File Excel tidak ditemukan")
+    st.stop()
 
-st.title("Analisis Data Harga Saham")
-st.write("Data ini berisi pergerakan indeks saham di Indonesia.")
+# Baca data
+df = pd.read_excel(FILE_PATH, engine="openpyxl")
+df.columns = df.columns.str.strip()  # bersihkan spasi
 
-# ANALISIS UMUM
-st.subheader("1. Gambaran Umum Data")
-st.write("""
-Data yang dianalisis merupakan data **time series** harga saham
-yang terdiri dari:
-- **Composite Index (IHSG)** sebagai indikator pasar secara keseluruhan
-- **LQ45** yang mewakili saham paling likuid
-- **IDX30** yang mewakili saham berkapitalisasi besar
+# Pastikan kolom Tanggal datetime
+df['Tanggal'] = pd.to_datetime(df['Tanggal'])
 
+# Filter tanggal manual
+start_date = pd.to_datetime("2025-01-02")
+end_date = pd.to_datetime("2025-12-15")
+filtered_df = df[(df['Tanggal'] >= start_date) & (df['Tanggal'] <= end_date)]
 
-st.subheader("2. Statistik Deskriptif")
-st.write("""
-Berdasarkan statistik deskriptif, dapat disimpulkan bahwa:
-IHSG memiliki nilai rata-rata paling tinggi karena mencerminkan agregasi seluruh saham.
-LQ45 menunjukkan fluktuasi yang lebih besar dibanding IDX30.
-IDX30 relatif lebih stabil karena berisi saham-saham unggulan (blue chip).
-    """)
-st.write(data.describe())
+# ==============================
+# Ranking pertumbuhan saham
+# ==============================
+# Ambil semua kolom harga saham (kolom 1 ke seterusnya, asumsi kolom pertama Tanggal)
+price_columns = filtered_df.columns[1:]
 
+# Hitung return: (harga terakhir / harga pertama) - 1
+returns = filtered_df.iloc[-1][price_columns] / filtered_df.iloc[0][price_columns] - 1
 
-st.subheader("3. Analisis Pergerakan Indeks")
-st.write("""
-Pergerakan ketiga indeks menunjukkan **pola yang cenderung searah**.
-Hal ini menandakan adanya korelasi positif antar indeks saham.
+st.subheader(f"Ranking Saham dari {start_date.date()} sampai {end_date.date()}")
+st.dataframe(returns.sort_values(ascending=False))
 
-Saat IHSG mengalami penurunan, LQ45 biasanya turun lebih tajam.
-IDX30 cenderung mengalami perubahan yang lebih kecil,
-  menunjukkan tingkat risiko yang lebih rendah.
-""")
-
-
-st.subheader("4. Analisis Risiko dan Volatilitas")
-st.write("""
-Dari pola pergerakan data:
-LQ45  memiliki volatilitas paling tinggi sehingga cocok bagi investor agresif.
-IHSG mencerminkan kondisi pasar secara umum.
-IDX30 lebih stabil dan cocok untuk investasi jangka menengah hingga panjang.
-""")
-
-
-st.subheader("5. Kesimpulan")
-st.write("""
-Berdasarkan hasil analisis data Excel:
-Ketiga indeks saham bergerak searah dan saling memengaruhi.
-LQ45 paling sensitif terhadap perubahan kondisi pasar.
-IDX30 menunjukkan stabilitas tertinggi.
-Data ini dapat digunakan sebagai dasar pengambilan keputusan investasi
-   maupun analisis kondisi pasar modal Indonesia.
-""")
+st.write("Dalam periode 2 Januari hingga 15 Desember 2025, Composite Index menunjukkan pertumbuhan paling kuat sebesar 20,75%, sementara indeks blue-chip seperti IDX30 dan LQ45 hanya tumbuh masing-masing 2,51% dan 1,87%. Hal ini mengindikasikan bahwa penggerak pasar saham terutama berasal dari saham di luar kategori blue-chip.")
