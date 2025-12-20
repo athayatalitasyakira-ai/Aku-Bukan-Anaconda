@@ -6,7 +6,7 @@ import os
 st.title("Grafik Saham")
 
 BASE_DIR = os.getcwd()
-FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru.xlsx")
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
 
 if not os.path.exists(FILE_PATH):
     st.error("File Excel tidak ditemukan")
