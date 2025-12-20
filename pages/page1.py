@@ -1,4 +1,3 @@
-# Update app.py dan page1, cleanup repository
 import streamlit as st
 
 st.title("Welcome to Aku Bukan Anaconda's Homepage")
@@ -16,6 +15,3 @@ st.write("Daftar isi : perkenalan, tujuan, data saham, grafik, dan perbandingan 
 
 st.write("Data diambil dari daily IDX indices")
 st.write("Alat yang digunakan excel, github, git bash, streamlit, dan anaconda promt")
-
-
-
