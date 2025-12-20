@@ -31,7 +31,7 @@ st.subheader("📋 Preview Data Saham")
 
 # Cek file default di folder data/
 BASE_DIR = os.getcwd()
-DEFAULT_FILE = os.path.join(BASE_DIR, "data", "data_saham_xlsx.xlsx")  # nama file sudah sesuai
+DEFAULT_FILE = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")  # nama file sudah sesuai
 
 # Fungsi untuk membaca file Excel
 def load_excel(file_path):
