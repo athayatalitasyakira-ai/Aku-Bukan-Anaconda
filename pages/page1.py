@@ -6,7 +6,7 @@ import os
 # Judul & Informasi Kelompok
 # -----------------------------
 st.title("🏠 Home - Analisis data saham")
-st. write("Aku Bukan Anaconda")
+st.header("Aku Bukan Anaconda")
 st.write("Tugas Akhir Praktikum Big Data")
 
 # Anggota kelompok
