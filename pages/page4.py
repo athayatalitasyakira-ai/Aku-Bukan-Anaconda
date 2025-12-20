@@ -88,3 +88,8 @@ for _, row in statistik.iterrows():
         f"tertinggi **{row['max']:.2f}**, "
         f"rata-rata **{row['mean']:.2f}**"
     )
+
+import pandas as pd
+
+df = pd.read_excel("data.xlsx", engine="openpyxl")  # optional: engine="openpyxl"
+st.write(df.head())  # kalau pakai Streamlit
