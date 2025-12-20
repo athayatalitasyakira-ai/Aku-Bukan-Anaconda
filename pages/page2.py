@@ -1,41 +1,20 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 import os
 
-st.title("📊 Data Saham")
+st.title("Grafik Saham")
 
-
-BASE_DIR = os.path.dirname(os.path.dirname('Data Saham Prakbigdata.csv BARU'))
-
-
-FILE_PATH = os.path.join(BASE_DIR, 'Data_Saham_Prakbigdata.csv_BARU')
-
+BASE_DIR = os.getcwd()
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru.xlsx")
 
 if not os.path.exists(FILE_PATH):
-    st.error("❌ File data_saham.xlsx tidak ditemukan di folder data")
+    st.error("File Excel tidak ditemukan")
     st.stop()
 
+df = pd.read_excel(FILE_PATH, engine="openpyxl")
 
-df = pd.read_excel('Data_Saham_Prakbigdata.csv_BARU')
-
-st.success("✅ Data berhasil dimuat")
-
-
-st.write("Kolom tersedia:", df.columns.tolist())
-
-
-if "Perusahaan" not in df.columns:
-    st.error("❌ Kolom 'Perusahaan' tidak ditemukan di file Excel")
-    st.stop()
-
-
-perusahaan = st.selectbox(
-    "Pilih Perusahaan",
-    df["Perusahaan"].unique()
-)
-
-
-data_perusahaan = df[df["Perusahaan"] == perusahaan]
-
-st.subheader("📈 Detail Data")
-st.dataframe(data_perusahaan)
+st.subheader("📊 Grafik Harga Saham")
+fig, ax = plt.subplots()
+df.plot(y=df.columns[1], ax=ax)  # contoh plotting kolom kedua
+st.pyplot(fig)

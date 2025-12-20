@@ -1,21 +1,15 @@
 import streamlit as st
 
-pages = [
-    st.Page(page="pages/page1.py", title="Home", icon="🐊"),
-    st.Page(page="pages/page3.py", title="Grafik", icon="🦚"),
-    st.Page(page="pages/page4.py", title="Perbandingan", icon="🐢")
-]
-
-pg = st.navigation(
-    pages,
-    position="sidebar",
-    expanded=True
-)
-
-pg.run()
-
-
+# Konfigurasi halaman
 st.set_page_config(
-    page_title="Analisis Saham",
+    page_title="Analisis Data Saham",
     layout="wide"
 )
+
+# Judul utama
+st.title("📈 Analisis Data Saham")
+st.write("Gunakan sidebar untuk memilih page.")
+
+# NOTE:
+# Semua file Python di folder 'pages/' otomatis muncul di sidebar sebagai page.
+# Jadi tidak perlu membuat st.Page atau st.navigation sendiri.
