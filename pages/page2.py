@@ -9,7 +9,7 @@ st.title("📊 Grafik Semua Saham")
 # Path file Excel
 # -----------------------------
 BASE_DIR = os.getcwd()
-FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
+FILE_PATH = os.path.join(BASE_DIR, "data", "Data_Saham_Prakbigdata.xlsx")
 
 if not os.path.exists(FILE_PATH):
     st.error("❌ File Excel tidak ditemukan di folder data")
