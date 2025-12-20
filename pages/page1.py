@@ -2,7 +2,9 @@ import streamlit as st
 import pandas as pd
 import os
 
-# Judul halaman
+# -----------------------------
+# Judul & Informasi Kelompok
+# -----------------------------
 st.title("🏠 Home - Aku Bukan Anaconda")
 st.write("Tugas Akhir Praktikum Big Data")
 
@@ -27,17 +29,34 @@ st.write(
 # -----------------------------
 st.subheader("📋 Preview Data Saham")
 
-# Path file Excel
+# Cek file default di folder data/
 BASE_DIR = os.getcwd()
-FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_baru.xlsx")
+DEFAULT_FILE = os.path.join(BASE_DIR, "data", "data_saham_xlsx.xlsx")  # nama file sudah sesuai
 
-if not os.path.exists(FILE_PATH):
-    st.error("❌ File Excel tidak ditemukan di folder data")
-    st.stop()
+# Fungsi untuk membaca file Excel
+def load_excel(file_path):
+    try:
+        df = pd.read_excel(file_path, engine="openpyxl")
+        df.columns = df.columns.str.strip()
+        return df
+    except Exception as e:
+        st.error(f"❌ Gagal membaca file: {e}")
+        return None
 
-# Baca data
-df = pd.read_excel(FILE_PATH, engine="openpyxl")
-df.columns = df.columns.str.strip()
-
-# Tampilkan data
-st.dataframe(df)
+# Jika file default ada, baca
+if os.path.exists(DEFAULT_FILE):
+    df = load_excel(DEFAULT_FILE)
+    if df is not None:
+        st.success(f"✅ Data berhasil dibaca dari {DEFAULT_FILE}")
+        st.dataframe(df)
+# Jika file default tidak ada, gunakan uploader
+else:
+    st.warning("⚠ File Excel tidak ditemukan di folder 'data/'. Silakan upload file Excel.")
+    uploaded_file = st.file_uploader("Upload file Excel (.xlsx)", type=["xlsx"])
+    if uploaded_file is not None:
+        df = load_excel(uploaded_file)
+        if df is not None:
+            st.success("✅ Data berhasil dibaca dari file yang diupload")
+            st.dataframe(df)
+    else:
+        st.info("Silakan upload file untuk menampilkan data saham.")
