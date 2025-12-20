@@ -52,9 +52,21 @@ if selected_stocks:
     ax.legend(selected_stocks)
     st.pyplot(fig)
     
-df['Tanggal'] = pd.to_datetime(df['Tanggal'])  # pastikan ada kolom tanggal
-start_date = st.date_input("Mulai dari", df['Tanggal'].min())
-end_date = st.date_input("Sampai", df['Tanggal'].max())
+import pandas as pd
+import streamlit as st
 
+# Pastikan kolom Tanggal tipe datetime
+df['Tanggal'] = pd.to_datetime(df['Tanggal'])
+
+# Tentukan range tanggal secara manual
+start_date = pd.to_datetime("2025-01-02")
+end_date = pd.to_datetime("2025-12-15")
+
+# Filter data sesuai tanggal
 filtered_df = df[(df['Tanggal'] >= start_date) & (df['Tanggal'] <= end_date)]
+
+# Tampilkan hasil filter
+st.subheader(f"Data Saham dari {start_date.date()} sampai {end_date.date()}")
+st.dataframe(filtered_df)
+
 
