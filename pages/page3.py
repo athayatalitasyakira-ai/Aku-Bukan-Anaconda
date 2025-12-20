@@ -52,7 +52,7 @@ if selected_stocks:
     ax.legend(selected_stocks)
     st.pyplot(fig)
 
-st.write("Berdasarkan data pergerakan indeks saham dari Februari hingga Desember 2025, ketiga indeks—Composite Index, LQ45, dan IDX30—menunjukkan tren kenaikan secara umum, meskipun disertai volatilitas yang signifikan. Composite Index naik dari sekitar 7.163 menjadi 8.650, sementara LQ45 dan IDX30 juga mengalami peningkatan serupa. Pasar sempat mengalami koreksi tajam pada Februari–Maret 2025, dengan Composite Index mencapai titik terendah di 6.161, namun berhasil pulih dan bahkan mencatat level tertinggi baru menjelang akhir periode. Saham blue-chip dalam LQ45 dan IDX30 tampak lebih stabil dibandingkan indeks luas, mencerminkan ketahanan yang lebih baik selama fase fluktuasi.")
+st.write("Berdasarkan data pergerakan indeks saham dari januari hingga Desember 2025, ketiga indeks—Composite Index, LQ45, dan IDX30—menunjukkan tren kenaikan secara umum, meskipun disertai volatilitas yang signifikan. Composite Index naik dari sekitar 7.163 menjadi 8.650, sementara LQ45 dan IDX30 juga mengalami peningkatan serupa. Pasar sempat mengalami koreksi tajam pada Februari–Maret 2025, dengan Composite Index mencapai titik terendah di 6.161, namun berhasil pulih dan bahkan mencatat level tertinggi baru menjelang akhir periode. Saham blue-chip dalam LQ45 dan IDX30 tampak lebih stabil dibandingkan indeks luas, mencerminkan ketahanan yang lebih baik selama fase fluktuasi.")
     
 import streamlit as st
 import pandas as pd
@@ -93,4 +93,5 @@ returns = filtered_df.iloc[-1][price_columns] / filtered_df.iloc[0][price_column
 st.subheader(f"Ranking Saham dari {start_date.date()} sampai {end_date.date()}")
 st.dataframe(returns.sort_values(ascending=False))
 
+st.write("Dalam periode 2 Januari hingga 15 Desember 2025, Composite Index menunjukkan pertumbuhan paling kuat sebesar 20,75%, sementara indeks blue-chip seperti IDX30 dan LQ45 hanya tumbuh masing-masing 2,51% dan 1,87%. Hal ini mengindikasikan bahwa penggerak pasar saham terutama berasal dari saham di luar kategori blue-chip.")
 
