@@ -52,21 +52,43 @@ if selected_stocks:
     ax.legend(selected_stocks)
     st.pyplot(fig)
     
-import pandas as pd
 import streamlit as st
+import pandas as pd
+import os
 
-# Pastikan kolom Tanggal tipe datetime
+st.title("🏆 Ranking Saham Berdasarkan Pertumbuhan")
+
+# Path file Excel
+BASE_DIR = os.getcwd()
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
+
+# Cek file
+if not os.path.exists(FILE_PATH):
+    st.error("File Excel tidak ditemukan")
+    st.stop()
+
+# Baca data
+df = pd.read_excel(FILE_PATH, engine="openpyxl")
+df.columns = df.columns.str.strip()  # bersihkan spasi
+
+# Pastikan kolom Tanggal datetime
 df['Tanggal'] = pd.to_datetime(df['Tanggal'])
 
-# Tentukan range tanggal secara manual
+# Filter tanggal manual
 start_date = pd.to_datetime("2025-01-02")
 end_date = pd.to_datetime("2025-12-15")
-
-# Filter data sesuai tanggal
 filtered_df = df[(df['Tanggal'] >= start_date) & (df['Tanggal'] <= end_date)]
 
-# Tampilkan hasil filter
-st.subheader(f"Data Saham dari {start_date.date()} sampai {end_date.date()}")
-st.dataframe(filtered_df)
+# ==============================
+# Ranking pertumbuhan saham
+# ==============================
+# Ambil semua kolom harga saham (kolom 1 ke seterusnya, asumsi kolom pertama Tanggal)
+price_columns = filtered_df.columns[1:]
+
+# Hitung return: (harga terakhir / harga pertama) - 1
+returns = filtered_df.iloc[-1][price_columns] / filtered_df.iloc[0][price_columns] - 1
+
+st.subheader(f"Ranking Saham dari {start_date.date()} sampai {end_date.date()}")
+st.dataframe(returns.sort_values(ascending=False))
 
 
