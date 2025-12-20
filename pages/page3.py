@@ -51,6 +51,8 @@ if selected_stocks:
     ax.set_title("Perbandingan Saham Terpilih")
     ax.legend(selected_stocks)
     st.pyplot(fig)
+
+st.write("Berdasarkan data pergerakan indeks saham dari Februari hingga Desember 2025, ketiga indeks—Composite Index, LQ45, dan IDX30—menunjukkan tren kenaikan secara umum, meskipun disertai volatilitas yang signifikan. Composite Index naik dari sekitar 7.163 menjadi 8.650, sementara LQ45 dan IDX30 juga mengalami peningkatan serupa. Pasar sempat mengalami koreksi tajam pada Februari–Maret 2025, dengan Composite Index mencapai titik terendah di 6.161, namun berhasil pulih dan bahkan mencatat level tertinggi baru menjelang akhir periode. Saham blue-chip dalam LQ45 dan IDX30 tampak lebih stabil dibandingkan indeks luas, mencerminkan ketahanan yang lebih baik selama fase fluktuasi.")
     
 import streamlit as st
 import pandas as pd
