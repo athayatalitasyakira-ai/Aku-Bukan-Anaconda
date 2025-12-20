@@ -52,6 +52,9 @@ if selected_stocks:
     ax.legend(selected_stocks)
     st.pyplot(fig)
     
-returns = filtered_df.iloc[-1, 1:] / filtered_df.iloc[0, 1:] - 1
-st.subheader("🏆 Ranking Saham Berdasarkan Pertumbuhan")
-st.dataframe(returns.sort_values(ascending=False))
+df['Tanggal'] = pd.to_datetime(df['Tanggal'])  # pastikan ada kolom tanggal
+start_date = st.date_input("Mulai dari", df['Tanggal'].min())
+end_date = st.date_input("Sampai", df['Tanggal'].max())
+
+filtered_df = df[(df['Tanggal'] >= start_date) & (df['Tanggal'] <= end_date)]
+
