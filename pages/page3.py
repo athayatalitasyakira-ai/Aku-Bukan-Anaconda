@@ -51,3 +51,7 @@ if selected_stocks:
     ax.set_title("Perbandingan Saham Terpilih")
     ax.legend(selected_stocks)
     st.pyplot(fig)
+    
+returns = filtered_df.iloc[-1, 1:] / filtered_df.iloc[0, 1:] - 1
+st.subheader("🏆 Ranking Saham Berdasarkan Pertumbuhan")
+st.dataframe(returns.sort_values(ascending=False))
