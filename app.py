@@ -8,7 +8,7 @@ st.set_page_config(
 
 # Judul utama
 st.title("📈 Analisis Data Saham")
-st.write("Gunakan sidebar untuk memilih page.")
+st.write("Kelompok aku bukan anaconda.")
 
 # NOTE:
 # Semua file Python di folder 'pages/' otomatis muncul di sidebar sebagai page.
