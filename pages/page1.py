@@ -1,4 +1,3 @@
-# Update app.py dan page1, cleanup repository
 import streamlit as st
 
 st.title("Welcome to Aku Bukan Anaconda's Homepage")
