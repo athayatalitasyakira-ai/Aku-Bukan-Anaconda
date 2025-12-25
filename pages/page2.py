@@ -8,7 +8,7 @@ st.title("📊 Grafik Semua Saham")
 # -----------------------------
 # Path file Excel
 # -----------------------------
-BASE_DIR = os.getcwd()
+#BASE_DIR = os.getcwd()
 #FILE_PATH = os.path.join(BASE_DIR, "data", "Data_Saham_Prakbigdata.xlsx")
 FILE_PATH = "data/data_saham_prakbigdata.xlsx"
 
