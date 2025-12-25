@@ -41,5 +41,5 @@ Pastikan tabel rapi dan tidak ada kolom kosong.
 ---
 
 ### 5️⃣ Data Siap Dipakai
-Simpan file dengan nama yang diinginkan
+Simpan file dengan nama yang diinginkan""")
 
