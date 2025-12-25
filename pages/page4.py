@@ -3,7 +3,7 @@ import streamlit as st
 st.title("📌 Langkah Mendapatkan Data Saham dari IDX")
 
 st.markdown("""
-Halaman ini menjelaskan cara memperoleh data saham dari website **IDX (Bursa Efek Indonesia)** untuk tugas Praktikum Big Data.
+Halaman ini menjelaskan cara memperoleh data saham dari website **IDX (Bursa Efek Indonesia)**
 """)
 
 st.header("📝 Langkah-Langkah")
