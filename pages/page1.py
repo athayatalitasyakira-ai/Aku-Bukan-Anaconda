@@ -39,7 +39,7 @@ if not os.path.exists(FILE_PATH):
     st.info("Silakan pastikan file ada di: data/data_saham_prakbigdata.xlsx")
 else:
     df = pd.read_excel(FILE_PATH, engine="openpyxl")
-    st.dataframe(df.head())
+    st.dataframe(df.head(10))
 
 
 
