@@ -21,6 +21,27 @@ st.write(
 
 st.write("Data diambil dari daily IDX indices")
 
+# -----------------------------
+# Preview Data Saham
+# -----------------------------
+import pandas as pd
+import os
+
+st.subheader("📋 Preview Data Saham")
+
+# Lokasi file (folder: data/)
+BASE_DIR = os.getcwd()
+FILE_PATH = os.path.join(BASE_DIR, "data", "data_saham_prakbigdata.xlsx")
+
+# Cek apakah file ada
+if not os.path.exists(FILE_PATH):
+    st.warning("⚠ File Excel belum ditemukan di folder **data/**")
+    st.info("Silakan pastikan file ada di: data/data_saham_prakbigdata.xlsx")
+else:
+    df = pd.read_excel(FILE_PATH, engine="openpyxl")
+    st.dataframe(df.head())
+
+
 
 
 
