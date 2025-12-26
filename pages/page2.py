@@ -19,7 +19,7 @@ if not os.path.exists(FILE_PATH):
 # -----------------------------
 # Baca data
 # -----------------------------
-df = pd.read_excel(FILE_PATH, engine="openpyxl")
+df = pd.read_excel(FILE_PATH)
 df.columns = df.columns.str.strip()  # bersihkan spasi di nama kolom
 
 # -----------------------------
