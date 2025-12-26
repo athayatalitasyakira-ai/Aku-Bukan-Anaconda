@@ -1,44 +1,37 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px
 import os
 
 st.title("📊 Grafik Semua Saham")
 
-# -----------------------------
-# Path file Excel
-# -----------------------------
-#BASE_DIR = os.getcwd()
-#FILE_PATH = os.path.join(BASE_DIR, "data", "Data_Saham_Prakbigdata.xlsx")
 FILE_PATH = "data/data_saham_prakbigdata.xlsx"
 
 if not os.path.exists(FILE_PATH):
     st.error("❌ File Excel tidak ditemukan di folder data")
     st.stop()
 
-# -----------------------------
-# Baca data
-# -----------------------------
 df = pd.read_excel(FILE_PATH)
-df.columns = df.columns.str.strip()  # bersihkan spasi di nama kolom
+df.columns = df.columns.str.strip()
 
-# -----------------------------
-# Pilih kolom harga saham
-# -----------------------------
 numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
 if not numeric_cols:
     st.error("❌ Tidak ada kolom numeric untuk diplot")
     st.stop()
 
-st.subheader("📈 Grafik Semua Saham")
+st.subheader("📈 Grafik Semua Saham (Interaktif)")
 
-# -----------------------------
-# Plot semua kolom numeric
-# -----------------------------
-fig, ax = plt.subplots(figsize=(10, 6))
-df[numeric_cols].plot(ax=ax)  # plot semua kolom numeric
-ax.set_xlabel("Baris / Index")
-ax.set_ylabel("Harga Saham")
-ax.set_title("Pergerakan Semua Saham")
-ax.legend(numeric_cols)
-st.pyplot(fig)
+fig = px.line(
+    df,
+    x=df.index,
+    y=numeric_cols,
+    markers=True,
+    title="Pergerakan Semua Saham"
+)
+
+fig.update_layout(
+    xaxis_title="Index / Tanggal",
+    yaxis_title="Harga Saham"
+)
+
+st.plotly_chart(fig, use_container_width=True)
